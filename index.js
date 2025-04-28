@@ -14,9 +14,7 @@ app.use(express.json())
 app.use('/url', urlRoute)
 app.get('/:shortId', async(req, res) => {
     const shortId = req.params.shortId;
-    const entry  = await Url.findOneAndUpdate({
-        shortId
-    }, {$push:{
+    const entry  = await Url.findOneAndUpdate({shortId}, {$push:{
         visitHistory: {
             timestamp: Date.now()
         }
