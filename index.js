@@ -1,24 +1,39 @@
 const express = require("express")
+const path = require('path')
 const { connectToMongoDB } = require('./connection')
 const urlRoute = require('./routes/url')
+const staticRouter = require('./routes/staticRouter')
 const app = express();
 const PORT = 8001
 const Url = require('./models/url')
 
 connectToMongoDB('mongodb://localhost:27017/short-url')
-.then(() => console.log("Mongodb connected"))
+    .then(() => console.log("Mongodb connected"));
+
+//setting ejs for server site rendering
+app.set('view engine', 'ejs')
+app.set('views', path.resolve("./view"))
 
 //for parsing the body we use one middleware
-app.use(express.json()) 
+app.use(express.json())
+//for parsing form data its is new middleware
+app.use(express.urlencoded({ extended: false }))
+
 
 app.use('/url', urlRoute)
-app.get('/:shortId', async(req, res) => {
+//
+app.use('/', staticRouter)
+
+
+app.get('/url/:shortId', async (req, res) => {
     const shortId = req.params.shortId;
-    const entry  = await Url.findOneAndUpdate({shortId}, {$push:{
-        visitHistory: {
-            timestamp: Date.now()
+    const entry = await Url.findOneAndUpdate({ shortId }, {
+        $push: {
+            visitHistory: {
+                timestamp: Date.now()
+            }
         }
-    }})
+    })
     res.redirect(entry.redirectURL)
 })
 
