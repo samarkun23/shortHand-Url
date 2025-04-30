@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: rgb(29, 29, 29);
+            color: rgb(185, 185, 185);
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+    <% if (locals.id) { %>
+    <!-- backend se jo data ata hai vo locals mai hota hai   -->
+     <p>URL Generated: http://localhost:8001/url/<%= id %></p>
+    <% } %>
+    <div>
+        <form method="POST" action="/url">
+            <label>Enter Your Original URL</label>
+            <input type="text" placeholder="https://example.com" name="url">
+            <button type="submit">Generate</button>
+        </form>
+    </div>
+    <div>
+        
+    </div>
+
+
+
+</body>
+</html>
