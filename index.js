@@ -1,11 +1,17 @@
 const express = require("express")
 const path = require('path')
 const { connectToMongoDB } = require('./connection')
-const urlRoute = require('./routes/url')
-const staticRouter = require('./routes/staticRouter')
 const app = express();
 const PORT = 8001
 const Url = require('./models/url')
+
+//all routes
+const urlRoute = require('./routes/url')
+const staticRouter = require('./routes/staticRouter')
+const userRoute = require('./routes/user')
+
+
+
 
 connectToMongoDB('mongodb://localhost:27017/short-url')
     .then(() => console.log("Mongodb connected"));
@@ -21,6 +27,7 @@ app.use(express.urlencoded({ extended: false }))
 
 
 app.use('/url', urlRoute)
+app.use('/user', userRoute)
 //
 app.use('/', staticRouter)
 
