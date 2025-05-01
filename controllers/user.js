@@ -8,7 +8,17 @@ async function handleUserSingup(req, res) {
         email,
         password,
     });
-    return res.render("home"); 
+    return res.redirect('/'); 
+}
+
+
+async function handleUserLogin(req, res) {
+    const { email, password } = req.body;
+    const user = await User.findOne({email,password,});
+    if(!user) return res.render('login',{
+        error: "Invalid Email and Password"
+    }) 
+    return res.redirect("/"); 
 }
 
 
@@ -16,6 +26,7 @@ async function handleUserSingup(req, res) {
 
 module.exports = {
     handleUserSingup,
+    handleUserLogin
 }
 
 
