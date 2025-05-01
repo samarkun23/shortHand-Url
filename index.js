@@ -1,8 +1,10 @@
 const express = require("express")
 const path = require('path')
+const cookieParser = require('cookie-parser')
 const { connectToMongoDB } = require('./connection')
 const app = express();
 const PORT = 8001
+const {restrictToLoggedinUserOnly} = require('./middleware/auth')
 const Url = require('./models/url')
 
 //all routes
@@ -24,9 +26,10 @@ app.set('views', path.resolve("./view"))
 app.use(express.json())
 //for parsing form data its is new middleware
 app.use(express.urlencoded({ extended: false }))
+//for parsing the cookie 
+app.use(cookieParser());    
 
-
-app.use('/url', urlRoute)
+app.use('/url',restrictToLoggedinUserOnly,  urlRoute) //using the middleware
 app.use('/user', userRoute)
 //
 app.use('/', staticRouter)
