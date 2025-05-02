@@ -4,8 +4,8 @@ function setUser(user) {
    return jwt.sign(user, secret) 
 }
 
-function getUser(id) {
-   return sessionIdToUserMap.get(id) 
+function getUser(token) {
+   return jwt.verify(token, secret) 
 }
 
 
