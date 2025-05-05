@@ -2,12 +2,11 @@ const { getUser } = require('../uuidService/auth')
 
 //Authontications
 function checkForAuthentication(req, res, next) {
-    const authorizationHeaderValue = req.headers['authorization'];
+    const tokenCookie = req.cookies?.token;
     req.user = null 
-    if (!authorizationHeaderValue || !authorizationHeaderValue.startsWith('Bearer')) 
-        return next();  
+    if (!tokenCookie) return next();  
 
-    const token = authorizationHeaderValue.split('Bearer ')[1]
+    const token = tokenCookie
     const user = getUser(token);
 
     req.user = user;
@@ -16,13 +15,13 @@ function checkForAuthentication(req, res, next) {
 }
 
 //ADMIN, NORMAL (For any role define) -> Authorization
-function restricTo(role) {
+function restricTo(role = []) {
     return function(req, res , next){
         if(!req.user) return res.redirect('/login') 
         
-        if(role.includes(req.user.role)) return res.end('UnAuthorized')
+        if(!role.includes(req.user.role)) return res.end('UnAuthorized')
         
-        return next
+        return next()
     }
 
 }
