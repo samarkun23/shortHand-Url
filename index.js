@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(checkForAuthentication)
 
 
-app.use('/url', restricTo(['NORMAL'])  ,urlRoute) //using the middleware
+app.use('/url', restricTo(['NORMAL', 'ADMIN'])  ,urlRoute) //using the middleware
 app.use('/user', userRoute)
 //
 app.use('/', staticRouter)
